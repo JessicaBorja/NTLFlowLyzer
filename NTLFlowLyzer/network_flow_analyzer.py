@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import dpkt
+import os
+
 import socket
 import multiprocessing
 import warnings
@@ -10,7 +12,6 @@ from .network_flow_capturer import NetworkFlowCapturer
 from .feature_extractor import FeatureExtractor
 from .writers import Writer, CSVWriter
 from .config_loader import ConfigLoader
-
 from dpkt import ethernet
 
 
@@ -80,7 +81,9 @@ class NTLFlowLyzer(object):
                         self.__extractor_thread_finish.set(True)
 
                 writer_thread.join()
-            print(">> Results are ready!")
+            
+            _output_file_address = os.path.abspath(self.__config.output_file_address)
+            print(f">> Results are ready! output file address: {_output_file_address}")
 
     def feature_extractor(self, pool: Pool):
         feature_extractor = FeatureExtractor(self.__config.floating_point_unit)
