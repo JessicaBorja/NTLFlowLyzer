@@ -1,6 +1,10 @@
 {
     "pcap_file_address": "/home/damenpa/workspace/ciberseguridad/pcap_pruebas/PCAP-03-11/SAT-03-11-2018_0144",
     "output_file_address": "/home/damenpa/workspace/ciberseguridad/outputs/outputstest.csv",
+    //For batch processing this lines need to be in the config file
+    //The line to run it is the following: python -m NTLFlowLyzer -b -c "path/to/config.json"
+    "batch_address": "/home/damenpa/workspace/ciberseguridad/pcap_pruebas/PCAP-03-11",
+    "batch_address_output": "/home/damenpa/workspace/ciberseguridad/outputs",
     "number_of_threads": 4,
     "feature_extractor_min_flows": 2500,
     "writer_min_rows": 1000,

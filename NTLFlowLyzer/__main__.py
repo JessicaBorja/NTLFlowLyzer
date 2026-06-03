@@ -20,9 +20,12 @@ def args_parser() -> argparse.ArgumentParser:
 
 
 def find_pcap_files(directory):
-    file_pattern = directory + '/*'
-    pcap_files = glob.glob(file_pattern)
-    return pcap_files
+    import os
+    pcap_files = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            pcap_files.append(os.path.join(root, file))
+    return sorted(pcap_files)
 
 
 def main():
@@ -42,13 +45,14 @@ def main():
     batch_address_output = config.batch_address_output
     pcap_files = find_pcap_files(batch_address)
     print(f">> {len(pcap_files)} number of files detected. Lets go for analyze them!")
+    merged_file = f"{batch_address_output}/merged_output.csv"
+    config.output_file_address = merged_file
     for file in pcap_files:
         print(100*"#")
-        output_file_name = file.split('/')[-1]
         config.pcap_file_address = file
-        config.output_file_address = f"{batch_address_output}/{output_file_name}.csv"
         network_flow_analyzer = NTLFlowLyzer(config, online_capturing, parsed_arguments.continues_batch_mode)
         network_flow_analyzer.run()
+    print(f">> All PCAPs processed. Merged CSV: {merged_file}")
 
 
 if __name__ == "__main__":

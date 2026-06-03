@@ -111,11 +111,17 @@ class NTLFlowLyzer(object):
 
 
     def writer(self):
+        import os
         writer = Writer(CSVWriter())
         header_writing_mode = 'w'
         data_writing_mode = 'a+'
         file_address = self.__config.output_file_address
-        write_headers = True
+        # If output file already exists and is non-empty, append and skip header
+        if os.path.exists(file_address) and os.path.getsize(file_address) > 0:
+            write_headers = False
+            header_writing_mode = 'a+'
+        else:
+            write_headers = True
         while 1:
             if len(self.__data) >= self.__config.writer_min_rows:
                 with self.__writed_rows_lock and self.__output_file_index_lock:
